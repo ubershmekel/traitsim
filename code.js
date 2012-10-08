@@ -230,8 +230,10 @@ function birthAndKill(person1, person2) {
 var sexLine = null
 var mate1 = null
 var mate2 = null
+var isSexLineDrawn = false;
 function initSexIteration() {
     if(leftToMate == 0) {
+        isAnimatingSex = false
         endSex()
         return
     }
@@ -245,6 +247,8 @@ function initSexIteration() {
     sexLine.strokeColor = '#f00'
     sexLine.add(mate1.path.position)
     sexLine.add(mate2.path.position)
+    
+    isSexLineDrawn = true
 }
 
 function endSexIteration() {
@@ -256,6 +260,7 @@ function endSexIteration() {
 var isSexing = false
 var generations = 0
 var leftToMate = 0
+var isAnimatingSex = false
 function initSex() {
     if (isSexing) {
         throw "can't sex more, I'm in the middle of sexing!"
@@ -305,7 +310,7 @@ function onFrame(event) {
         }
     }
     
-    if (isSexing) {
+    if (isAnimatingSex) {
         if (sexLine == null) {
             initSexIteration()
         } else {
@@ -321,6 +326,7 @@ function onFrame(event) {
 
 function onMouseDown(event) {
     initSex()
+    isAnimatingSex = true
     announce('sex!')
 }
 
