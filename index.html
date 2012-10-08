@@ -20,12 +20,32 @@
             z-index: -9999;
             background-color: #000;
         }
+        
+        .floaty {
+            position: absolute;
+            background-color: #fff;
+            border: 2px solid #ddd;
+            padding: 5px;
+        }
+        
+        .floaty a {
+            margin: 10px;
+            text-decoration: none;
+            color: #000;
+            font-weight: bold;
+            font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        
+        .floaty a:hover {
+            text-decoration: underline;
+        }
     </style>
     
     <link rel="shortcut icon" href="eye.png" />
     
 </head>
 <body>
+    <div class="floaty"><a href="https://github.com/ubershmekel/traitsim">Source</a> <a href="">What is this?</a></div>
     <canvas id="myCanvas" resize="true"></canvas>
     
     <script src="http://cdnjs.cloudflare.com/ajax/libs/paper.js/0.22/paper.js"></script>

@@ -274,7 +274,7 @@ function endSex() {
 }
 
 function quickSex() {
-    leftToMate = people.length
+    initSex()
     while(leftToMate > 0) {
         mate1 = people.shift()
         var removingIndex = Math.floor(Math.random() * leftToMate)
@@ -330,7 +330,7 @@ function onMouseUp(event) {
 function onKeyUp(event) {
     if (event.key == 'c') {
         isSexParty = !isSexParty
-        if(isSexParty) {
+        if(isSexParty && (announcement == null)) {
             announce("It's party time!")
         }
     }
