@@ -216,50 +216,79 @@ function getRandom(seq) {
     return seq[Math.floor(Math.random() * seq.length)];
 }
 
+function birthAndKill(person1, person2) {
+    var pos = randomSpot()
+    for(var j = 0; j < 2; j++) {
+        var newGenes = [getRandom(person1.genes), getRandom(person2.genes)]
+        people.push(initPerson(newGenes, pos + [j * 10, 0]))
+    }
+    
+    person1.path.remove()
+    person2.path.remove()
+}
+
+var sexLine = null
+var mate1 = null
+var mate2 = null
+function initSexIteration() {
+    if(leftToMate == 0) {
+        endSex()
+        return
+    }
+    
+    mate1 = people.shift()
+    var removingIndex = Math.floor(Math.random() * leftToMate)
+    mate2 = people.splice(removingIndex, 1)[0]
+    leftToMate -= 2
+    
+    sexLine = new Path()
+    sexLine.strokeColor = '#f00'
+    sexLine.add(mate1.path.position)
+    sexLine.add(mate2.path.position)
+}
+
+function endSexIteration() {
+    birthAndKill(mate1, mate2)
+    sexLine.remove()
+    sexLine = null
+}
+
 var isSexing = false
 var generations = 0
-function sex() {
+var leftToMate = 0
+function initSex() {
     if (isSexing) {
         throw "can't sex more, I'm in the middle of sexing!"
     } else {
         isSexing = true
+        leftToMate = people.length
     }
-    
-    var newPeople = []
-    var tempPeople = []
-    var originalLength = people.length
-    for (var i = 0; i < people.length; i++) {
-        tempPeople[i] = people[i]
-    }
-    
-    while (tempPeople.length > 0) {
-        var person = tempPeople.shift()
-        var removingIndex = Math.random() * tempPeople.length
-        var mate = tempPeople.splice(removingIndex, 1)[0]
-        
-        var pos = randomSpot()
-        for(var j = 0; j < 2; j++) {
-            var newGenes = [getRandom(person.genes), getRandom(mate.genes)]
-            people.push(initPerson(newGenes, pos + [j * 10, 0]))
-        }
-    }
-    for (var i = 0; i < originalLength; i++) {
-        var parent = people.shift()
-        parent.path.remove()
-    }
-    
+}
+
+function endSex() {
     generations++
     
-    updateAllGraphs();
+    updateAllGraphs()
     
     isSexing = false
+}
+
+function quickSex() {
+    leftToMate = people.length
+    while(leftToMate > 0) {
+        mate1 = people.shift()
+        var removingIndex = Math.floor(Math.random() * leftToMate)
+        mate2 = people.splice(removingIndex, 1)[0]
+        leftToMate -= 2
+        birthAndKill(mate1, mate2)
+    }
+    endSex()
 }
 
 var lastParty = 0
 var isSexParty = false
 SEX_PARTY_DELAY = 0.5
 function onFrame(event) {
-    
     // people randomly moving about
     for (var i = 0; i < people.length; i++) {
         people[i].path.translate(Point.random() - [0.5, 0.5]);
@@ -276,14 +305,22 @@ function onFrame(event) {
         }
     }
     
-    if (isSexParty && (event.time - lastParty > SEX_PARTY_DELAY)) {
+    if (isSexing) {
+        if (sexLine == null) {
+            initSexIteration()
+        } else {
+            endSexIteration()
+        }
+    }
+    
+    if (!isSexing && isSexParty && (event.time - lastParty > SEX_PARTY_DELAY)) {
         lastParty = event.time
-        sex()
+        quickSex()
     }
 }
 
 function onMouseDown(event) {
-    sex()
+    initSex()
     announce('sex!')
 }
 

@@ -9,3 +9,5 @@ Each "sex" generation causes the entire population to randomly pair up and
 make 2 children. The results are visible in the bar graphs at the bottom left.
 
 Live demo at http://yuvalg.com/traitsim/
+
+Based on Paper.js http://paperjs.org
