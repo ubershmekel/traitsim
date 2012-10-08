@@ -95,9 +95,8 @@ function initPeople() {
     }
     return people;
 }
-initPeople()
 
-function initUI() {
+function initTitles() {
     messages = [
         "TraitSim",
         "Simulate recessive and dominant gene demographics",
@@ -112,7 +111,6 @@ function initUI() {
         text.fontSize = 15;
     }
 }
-initUI();
 
 function countState() {
     var geneCount = {}
@@ -144,6 +142,14 @@ function countState() {
 var barMaxWidth = 200;
 var barMaxThickness = 20
 var barTextRelief = 5
+function graphText(pos, str) {
+    var text = new PointText(pos);
+    text.fontSize = 10
+    text.fillColor = 'white'
+    text.content = str
+    return text
+}
+
 function initGraph(pos, amount, label, color) {
     var rightX = barMaxWidth * amount / 100;
     path = new Path.Rectangle(pos, new Size(rightX, barMaxThickness))
@@ -152,10 +158,7 @@ function initGraph(pos, amount, label, color) {
         //strokeWidth: GENE_WIDTH,
         //strokeCap: 'round'
     };
-    var text = new PointText(pos + [rightX + 5, barMaxThickness - barTextRelief]);
-    text.fontSize = 10
-    text.fillColor = 'white'
-    text.content = label
+    var text = graphText(pos + [rightX + 5, barMaxThickness - barTextRelief], label)
     return {
         path: path,
         text: text,
@@ -166,12 +169,16 @@ function initGraph(pos, amount, label, color) {
 }
 
 var graphs = {}
-graphs.gene = {}
-graphs.gene[BLUE] = initGraph(new Point(10, view.size.height - barMaxThickness * 1.5), 50, 'blue genes', BLUE.color)
-graphs.gene[BROWN] = initGraph(new Point(10, view.size.height - barMaxThickness * 3), 50, 'brown genes', BROWN.color)
-graphs.trait = {}
-graphs.trait[BLUE] = initGraph(new Point(10, view.size.height - barMaxThickness * 4.5), 50, 'blue eyes', BLUE.color)
-graphs.trait[BROWN] = initGraph(new Point(10, view.size.height - barMaxThickness * 6), 50, 'brown eyes', BROWN.color)
+function initAllGraphs() {
+    graphs.gene = {}
+    var graphsPoint = new Point(10, view.size.height)
+    graphs.gene[BLUE] = initGraph(graphsPoint - [0, barMaxThickness * 1.5], 50, 'blue genes', BLUE.color)
+    graphs.gene[BROWN] = initGraph(graphsPoint - [0, barMaxThickness * 3], 50, 'brown genes', BROWN.color)
+    graphs.trait = {}
+    graphs.trait[BLUE] = initGraph(graphsPoint - [0, barMaxThickness * 4.5], 50, 'blue eyes', BLUE.color)
+    graphs.trait[BROWN] = initGraph(graphsPoint - [0, barMaxThickness * 6], 50, 'brown eyes', BROWN.color)
+    graphs.generation = graphText(graphsPoint - [0, barMaxThickness * 7.5 + - barTextRelief], '')
+}
 
 function updateGraph(graph, amount) {
     var baseX = graph.path.segments[0].point.x
@@ -189,8 +196,8 @@ function updateAllGraphs() {
     updateGraph(graphs.gene[BROWN], counts.gene[BROWN])
     updateGraph(graphs.trait[BLUE], counts.trait[BLUE])
     updateGraph(graphs.trait[BROWN], counts.trait[BROWN])
+    graphs.generation.content = generations + " generations"
 }
-updateAllGraphs();
 
 var announcement = null;
 function announce(text) {
@@ -210,12 +217,14 @@ function getRandom(seq) {
 }
 
 var isSexing = false
+var generations = 0
 function sex() {
     if (isSexing) {
         throw "can't sex more, I'm in the middle of sexing!"
     } else {
         isSexing = true
     }
+    
     var newPeople = []
     var tempPeople = []
     var originalLength = people.length
@@ -239,6 +248,8 @@ function sex() {
         parent.path.remove()
     }
     
+    generations++
+    
     updateAllGraphs();
     
     isSexing = false
@@ -257,7 +268,7 @@ function onFrame(event) {
     if (announcement != null) {
         announcement.fontSize = announcement.fontSize * 0.95;
         announcement.position.y = announcement.position.y * 0.99
-        announcement.fillColor.alpha = announcement.fillColor.alpha * 0.95
+        announcement.fillColor.alpha = announcement.fillColor.alpha * 0.97
 
         if(announcement.fillColor.alpha < 0.01) {
             announcement.remove()
@@ -282,6 +293,13 @@ function onMouseUp(event) {
 function onKeyUp(event) {
     if (event.key == 'c') {
         isSexParty = !isSexParty
+        if(isSexParty) {
+            announce("It's party time!")
+        }
     }
 }
 
+initPeople()
+initTitles()
+initAllGraphs()
+updateAllGraphs()
