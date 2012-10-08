@@ -41,14 +41,15 @@
             </div>
         </div>
     </div>
-    <canvas id="myCanvas" resize="true"></canvas>
     <div class="container">
+        <canvas id="myCanvas" resize="true"></canvas>
         <div class="span4 main_link">
-            <h2 style="color: #33f;">Blue eyed genes</h2>
+             Simulating passive and recessive gene demographics.
+            <h2 style="color: #2bf;">Blue eyed genes</h2>
             <p>100</p>
         </div>
         <div class="span4 main_link">
-            <h2 style="color: #933;">Brown eyed genes</h2>
+            <h2 style="color: #a31;">Brown eyed genes</h2>
             <p>100</p>
         </div>
     </div>
@@ -57,8 +58,24 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.1.1/bootstrap.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/paper.js/0.22/paper.js"></script>
     <script type="text/paperscript" canvas="myCanvas">
+    var BLUE = {
+        name: 'blue',
+        color: '#2bf',
+        isDominant: false
+        };
+    var BROWN = {
+        name: 'brown',
+        color: '#a40',
+        isDominant: true
+        };
+    
+    var GENE_HEIGHT = 10;
+    var GENE_WIDTH = 20;
+    var GENE_SPACING = 5;
+    var initAmount = 100;
+
+    function shuffle(list) {
     //shuffles list in-place
-    var shuffle = function(list) {
         var i, j, t;
         for (i = 1; i < list.length; i++) {
             // choose j in [0..i]
@@ -71,12 +88,40 @@
             }
         }
     }
-
-    var BLUE = 0;
-    var BROWN = 1;
-
-    var initAmount = 100;
-
+    
+    function dominanceSort(gene_a, gene_b) {
+        return gene_a.isDominant;
+    }
+    
+    function initGene(gene, pos) {
+        var path = new Path();
+        path.add(pos);
+        path.add(pos + [0, GENE_HEIGHT]);
+        //var path = new Path.Rectangle(rects[i]);
+        path.style = {
+            strokeColor: gene.color,
+            strokeWidth: GENE_WIDTH,
+            strokeCap: 'round'
+        };
+        return path;
+    }
+    
+    function initPerson(genes, pos) {
+        var paths = []
+        if(genes.length == 0) {
+            throw "Bad person with no genes";
+        }
+        
+        genes.sort(dominanceSort);
+        
+        for(var i = 0; i < genes.length; i++) {
+            paths[i] = initGene(genes[i], pos + [i * GENE_SPACING, 0]);
+        }
+        
+        var group = new Group(paths);
+        return group;
+    }
+    
     var people = [];
     var person = [BLUE, BROWN];
     var genes = []
@@ -90,36 +135,27 @@
     shuffle(genes);
     
     var rects = []
+    var paths = []
     var rectSize = new Size(10, 10);
+    var r = new Rectangle(new Point(0,0), rectSize);
     for (var i = 0; i < initAmount; i++) {
         people[i] = {
                     genes: [genes[2 * i], genes[2 * i + 1]],
-                    pos: view.center + new Point(Math.random() * 300, Math.random() * 300)
                     }
-        rects[i] = new Rectangle(people[i]['pos'], rectSize);
-        var path = new Path.Rectangle(rects[i]);
-        path.style = {
-            strokeColor: '#1414EB',
-            strokeWidth: 20,
-            strokeCap: 'round'
-        };
+        //r.x = people[i].pos.x
+        //r.y = people[i].pos.y
+        var pos = view.center + new Point(Math.random() * 300 - 150, Math.random() * 300 - 150);
+        var path = initPerson(people[i].genes, pos);
+        
+        paths[i] = path;
     }
-    console.log(view.center);
 
-    var path = new Path();
-    path.style = {
-        strokeColor: '#1414EB',
-        strokeWidth: 20,
-        strokeCap: 'round'
-    };
-    path.opacity = 0.3
-
-    var size = 25;
-    var segments = path.segments;
-    var start = view.center / [10, 1];
-    for (var i = 0; i < size; i++)
-        path.add(start + new Point(i * 100, 0));
-
+    function onFrame(event) {
+        for (var i = 0; i < paths.length; i++) {
+            paths[i].translate(new Point(Math.random() * 1 - 0.5, Math.random() * 1 - 0.5));
+        }
+    }
+    
     function onMouseDown(event) {
         path.fullySelected = true;
         path.strokeColor = '#e08285';
