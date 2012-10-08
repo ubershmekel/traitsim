@@ -1,12 +1,17 @@
+// NOTE: the toString is important so I can use these as
+// values of associative arrays. Oh how I miss dict().
+
 var BLUE = {
     name: 'blue',
     color: '#29f',
-    isDominant: false
+    isDominant: false,
+    toString: function() { return this.name }
     };
 var BROWN = {
     name: 'brown',
     color: '#930',
-    isDominant: true
+    isDominant: true,
+    toString: function() { return this.name }
     };
 
 var GENE_HEIGHT = 10;
@@ -129,6 +134,7 @@ function countState(people) {
 
 var barMaxWidth = 200;
 var barMaxThickness = 20
+var barTextRelief = 5
 function initGraph(pos, amount, label, color) {
     var rightX = barMaxWidth * amount / 100;
     path = new Path.Rectangle(pos, new Size(rightX, barMaxThickness))
@@ -137,7 +143,7 @@ function initGraph(pos, amount, label, color) {
         //strokeWidth: GENE_WIDTH,
         //strokeCap: 'round'
     };
-    var text = new PointText(pos + [rightX + 5, barMaxThickness - 5]);
+    var text = new PointText(pos + [rightX + 5, barMaxThickness - barTextRelief]);
     text.fontSize = 10
     text.fillColor = 'white'
     text.content = label
@@ -159,8 +165,12 @@ graphs.trait[BLUE] = initGraph(new Point(10, 70), 50, 'blue eyes', BLUE.color)
 graphs.trait[BROWN] = initGraph(new Point(10, 100), 50, 'brown eyes', BROWN.color)
 
 function updateGraph(graph, amount) {
-    graph.path.width = barMaxWidth * amount / 100;
+    var barEdgeX = barMaxWidth * amount / 100;
+    graph.path.segments[2].point.x = barEdgeX;
+    graph.path.segments[3].point.x = barEdgeX;
+
     graph.text.content = amount + " " + graph.label
+    graph.text.position.x = barEdgeX + barTextRelief
 }
 
 function updateAllGraphs() {
@@ -169,8 +179,15 @@ function updateAllGraphs() {
     updateGraph(graphs.gene[BROWN], counts.gene[BROWN])
     updateGraph(graphs.trait[BLUE], counts.trait[BLUE])
     updateGraph(graphs.trait[BROWN], counts.trait[BROWN])
+    console.log(counts)
 }
 updateAllGraphs();
+
+
+function sex() {
+
+}
+
 
 function onFrame(event) {
     for (var i = 0; i < people.length; i++) {
@@ -179,6 +196,8 @@ function onFrame(event) {
 }
 
 function onMouseDown(event) {
+    sex()
+    updateAllGraphs();
 }
 
 function onMouseUp(event) {
