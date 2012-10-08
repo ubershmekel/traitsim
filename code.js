@@ -65,7 +65,17 @@ function initPerson(genes, pos) {
     }
     
     var group = new Group(paths);
-    return group;
+    var person = {
+                    genes: genes,
+                    path: group
+                    }    
+    return person
+}
+
+function randomSpot() {
+    var width = view.size.width;
+    var height = view.size.height;
+    return Point.random() * [width - 2 * MARGIN, height - 2 * MARGIN] + [MARGIN, MARGIN]
 }
 
 // init gene pool
@@ -77,21 +87,15 @@ for (var i = 0; i < initAmount; i++) {
 shuffle(genePool);
 
 function initPeople() {
-    var width = view.size.width;
-    var height = view.size.height;
-    var people = []
+    people = []
     for (var i = 0; i < initAmount; i++) {
         var genes = [genePool.shift(), genePool.shift()];
-        var pos = new Point(Math.random() * (width - 2 * MARGIN) + MARGIN, Math.random() * (height - 2 * MARGIN) + MARGIN);
-        var personPath = initPerson(genes, pos);
-        people[i] = {
-                    genes: genes,
-                    path: personPath
-                    }
+        var pos = randomSpot()
+        people[i] = initPerson(genes, pos)
     }
     return people;
 }
-var people = initPeople();
+initPeople()
 
 function initUI() {
     messages = ["TraitSim", 'Simulate recessive and dominant gene demographics', "Click anywhere for sex"];
@@ -105,7 +109,7 @@ function initUI() {
 }
 initUI();
 
-function countState(people) {
+function countState() {
     var geneCount = {}
     geneCount[BLUE] = 0
     geneCount[BROWN] = 0
@@ -158,11 +162,11 @@ function initGraph(pos, amount, label, color) {
 
 var graphs = {}
 graphs.gene = {}
-graphs.gene[BLUE] = initGraph(new Point(10, 10), 50, 'blue genes', BLUE.color)
-graphs.gene[BROWN] = initGraph(new Point(10, 40), 50, 'brown genes', BROWN.color)
+graphs.gene[BLUE] = initGraph(new Point(10, view.size.height - barMaxThickness * 1.5), 50, 'blue genes', BLUE.color)
+graphs.gene[BROWN] = initGraph(new Point(10, view.size.height - barMaxThickness * 3), 50, 'brown genes', BROWN.color)
 graphs.trait = {}
-graphs.trait[BLUE] = initGraph(new Point(10, 70), 50, 'blue eyes', BLUE.color)
-graphs.trait[BROWN] = initGraph(new Point(10, 100), 50, 'brown eyes', BROWN.color)
+graphs.trait[BLUE] = initGraph(new Point(10, view.size.height - barMaxThickness * 4.5), 50, 'blue eyes', BLUE.color)
+graphs.trait[BROWN] = initGraph(new Point(10, view.size.height - barMaxThickness * 6), 50, 'brown eyes', BROWN.color)
 
 function updateGraph(graph, amount) {
     var barEdgeX = barMaxWidth * amount / 100;
@@ -174,24 +178,81 @@ function updateGraph(graph, amount) {
 }
 
 function updateAllGraphs() {
-    var counts = countState(people)
+    var counts = countState()
     updateGraph(graphs.gene[BLUE], counts.gene[BLUE])
     updateGraph(graphs.gene[BROWN], counts.gene[BROWN])
     updateGraph(graphs.trait[BLUE], counts.trait[BLUE])
     updateGraph(graphs.trait[BROWN], counts.trait[BROWN])
-    console.log(counts)
 }
 updateAllGraphs();
 
+var announcement = null;
+function announce(text) {
+    if (announcement != null) {
+        //throw "can't announce more than one thing at a time wtf"
+        announcement.remove()
+    }
+    announcement = new PointText([view.size.width / 2, view.size.height]);
+    announcement.justification = 'center';
+    announcement.fontSize = view.size.width
+    announcement.fillColor = 'white'
+    announcement.content = text
+}
 
+function getRandom(seq) {
+    return seq[Math.floor(Math.random() * seq.length)];
+}
+
+var isSexing = false
 function sex() {
-
+    if (isSexing) {
+        throw "can't sex more, I'm in the middle of sexing!"
+    } else {
+        isSexing = true
+    }
+    announce('sex!')
+    var newPeople = []
+    var tempPeople = []
+    var originalLength = people.length
+    for (var i = 0; i < people.length; i++) {
+        tempPeople[i] = people[i]
+    }
+    
+    while (tempPeople.length > 0) {
+        var person = tempPeople.shift()
+        var removingIndex = Math.random() * tempPeople.length
+        var mate = tempPeople.splice(removingIndex, 1)[0]
+        
+        var pos = randomSpot()
+        for(var j = 0; j < 2; j++) {
+            var newGenes = [getRandom(person.genes), getRandom(mate.genes)]
+            people.push(initPerson(newGenes, pos + [j * 10, 0]))
+        }
+    }
+    for (var i = 0; i < originalLength; i++) {
+        var parent = people.shift()
+        parent.path.remove()
+    }
+    
+    isSexing = false
 }
 
 
 function onFrame(event) {
     for (var i = 0; i < people.length; i++) {
-        people[i].path.translate(new Point(Math.random() * 1 - 0.5, Math.random() * 1 - 0.5));
+        people[i].path.translate(Point.random() - [0.5, 0.5]);
+    }
+    
+    if (announcement != null) {
+        announcement.fontSize = announcement.fontSize * 0.95;
+        announcement.position.y = announcement.position.y * 0.99
+        announcement.fillColor.alpha = announcement.fillColor.alpha * 0.95
+       //announcement.opacity = 0.5
+        //console.log(announcement.opacity)
+        if(announcement.fillColor.alpha < 0.01) {
+            announcement.remove()
+            announcement = null;
+        }
     }
 }
 
