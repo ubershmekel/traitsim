@@ -98,7 +98,12 @@ function initPeople() {
 initPeople()
 
 function initUI() {
-    messages = ["TraitSim", 'Simulate recessive and dominant gene demographics', "Click anywhere for sex"];
+    messages = [
+        "TraitSim",
+        "Simulate recessive and dominant gene demographics",
+        "Click anywhere for random sex",
+        "Press 'c' for a crazy sex party"
+        ]
     for(var i = 0; i < messages.length; i++) {
         var text = new PointText([view.size.width / 2, 25 + i * 25]);
         text.justification = 'center';
@@ -169,7 +174,8 @@ graphs.trait[BLUE] = initGraph(new Point(10, view.size.height - barMaxThickness 
 graphs.trait[BROWN] = initGraph(new Point(10, view.size.height - barMaxThickness * 6), 50, 'brown eyes', BROWN.color)
 
 function updateGraph(graph, amount) {
-    var barEdgeX = barMaxWidth * amount / 100;
+    var baseX = graph.path.segments[0].point.x
+    var barEdgeX = baseX + barMaxWidth * amount / 100;
     graph.path.segments[2].point.x = barEdgeX;
     graph.path.segments[3].point.x = barEdgeX;
 
@@ -210,7 +216,6 @@ function sex() {
     } else {
         isSexing = true
     }
-    announce('sex!')
     var newPeople = []
     var tempPeople = []
     var originalLength = people.length
@@ -234,11 +239,17 @@ function sex() {
         parent.path.remove()
     }
     
+    updateAllGraphs();
+    
     isSexing = false
 }
 
-
+var lastParty = 0
+var isSexParty = false
+SEX_PARTY_DELAY = 0.5
 function onFrame(event) {
+    
+    // people randomly moving about
     for (var i = 0; i < people.length; i++) {
         people[i].path.translate(Point.random() - [0.5, 0.5]);
     }
@@ -247,19 +258,30 @@ function onFrame(event) {
         announcement.fontSize = announcement.fontSize * 0.95;
         announcement.position.y = announcement.position.y * 0.99
         announcement.fillColor.alpha = announcement.fillColor.alpha * 0.95
-       //announcement.opacity = 0.5
-        //console.log(announcement.opacity)
+
         if(announcement.fillColor.alpha < 0.01) {
             announcement.remove()
             announcement = null;
         }
     }
+    
+    if (isSexParty && (event.time - lastParty > SEX_PARTY_DELAY)) {
+        lastParty = event.time
+        sex()
+    }
 }
 
 function onMouseDown(event) {
     sex()
-    updateAllGraphs();
+    announce('sex!')
 }
 
 function onMouseUp(event) {
 }
+
+function onKeyUp(event) {
+    if (event.key == 'c') {
+        isSexParty = !isSexParty
+    }
+}
+
