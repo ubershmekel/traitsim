@@ -1,0 +1,134 @@
+<html>
+<head>
+    <title>TraitSim</title>
+    <meta name="Description" content="Recessive and dominant trait simulator" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"-->
+    <style>
+        /* this needs to come before bootstrap css so it reacts  correctly
+            and doesn't create a gap above the navbar on small windows */
+        body {
+            padding-top: 50px;
+        }
+    </style>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color:#eee;
+            min-width: 240px;
+        }
+        .main_link {
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            border-top: 1px solid #eee;
+        }
+        #myCanvas {
+            position: absolute;
+            z-index: -9999;
+        }
+    </style>
+    
+    <link rel="shortcut icon" href="key_y.png" />
+    
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a href="" class="brand">TraitSim</a>
+            </div>
+        </div>
+    </div>
+    <canvas id="myCanvas" resize="true"></canvas>
+    <div class="container">
+        <div class="span4 main_link">
+            <h2 style="color: #33f;">Blue eyed genes</h2>
+            <p>100</p>
+        </div>
+        <div class="span4 main_link">
+            <h2 style="color: #933;">Brown eyed genes</h2>
+            <p>100</p>
+        </div>
+    </div>
+    
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.1.1/bootstrap.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/paper.js/0.22/paper.js"></script>
+    <script type="text/paperscript" canvas="myCanvas">
+    //shuffles list in-place
+    var shuffle = function(list) {
+        var i, j, t;
+        for (i = 1; i < list.length; i++) {
+            // choose j in [0..i]
+            j = Math.floor(Math.random() * (1 + i));
+            if (j != i) {
+                // swap list[i] and list[j]
+                t = list[i];
+                list[i] = list[j];
+                list[j] = t;
+            }
+        }
+    }
+
+    var BLUE = 0;
+    var BROWN = 1;
+
+    var initAmount = 100;
+
+    var people = [];
+    var person = [BLUE, BROWN];
+    var genes = []
+
+    // init gene pool
+    for (var i = 0; i < initAmount; i++) {
+        genes[2 * i] = BLUE;
+        genes[2 * i + 1] = BROWN;
+    }
+    
+    shuffle(genes);
+    
+    var rects = []
+    var rectSize = new Size(10, 10);
+    for (var i = 0; i < initAmount; i++) {
+        people[i] = {
+                    genes: [genes[2 * i], genes[2 * i + 1]],
+                    pos: view.center + new Point(Math.random() * 300, Math.random() * 300)
+                    }
+        rects[i] = new Rectangle(people[i]['pos'], rectSize);
+        var path = new Path.Rectangle(rects[i]);
+        path.style = {
+            strokeColor: '#1414EB',
+            strokeWidth: 20,
+            strokeCap: 'round'
+        };
+    }
+    console.log(view.center);
+
+    var path = new Path();
+    path.style = {
+        strokeColor: '#1414EB',
+        strokeWidth: 20,
+        strokeCap: 'round'
+    };
+    path.opacity = 0.3
+
+    var size = 25;
+    var segments = path.segments;
+    var start = view.center / [10, 1];
+    for (var i = 0; i < size; i++)
+        path.add(start + new Point(i * 100, 0));
+
+    function onMouseDown(event) {
+        path.fullySelected = true;
+        path.strokeColor = '#e08285';
+    }
+
+    function onMouseUp(event) {
+        path.selected = false;
+        path.strokeColor = '#1414eb';
+    }
+</script>
+</body>
+</html>
