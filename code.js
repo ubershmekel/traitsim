@@ -112,6 +112,8 @@ function initTitles() {
     }
 }
 
+var goneExtinct = null;
+var extinctText = null;
 function countState() {
     var geneCount = {}
     geneCount[BLUE] = 0
@@ -131,6 +133,21 @@ function countState() {
             }
         }
         traitCount[selectedTrait] += 1
+    }
+    
+    if (geneCount[BLUE] == 0) {
+        goneExtinct = BLUE
+    }
+    if (geneCount[BROWN] == 0) {
+        goneExtinct = BROWN
+    }
+    
+    if ( (goneExtinct != null) && (extinctText == null) ) {
+        extinctText = new PointText(view.center);
+        extinctText.justification = 'center';
+        extinctText.fillColor = '#f00';
+        extinctText.content = goneExtinct + " has gone extinct after " + generations + " generations."
+        extinctText.fontSize = 35;
     }
     
     return {
@@ -282,9 +299,10 @@ function quickSex() {
     initSex()
     while(leftToMate > 0) {
         mate1 = people.shift()
+        leftToMate -= 1
         var removingIndex = Math.floor(Math.random() * leftToMate)
         mate2 = people.splice(removingIndex, 1)[0]
-        leftToMate -= 2
+        leftToMate -= 1
         birthAndKill(mate1, mate2)
     }
     endSex()
@@ -292,7 +310,7 @@ function quickSex() {
 
 var lastParty = 0
 var isSexParty = false
-SEX_PARTY_DELAY = 0.5
+SEX_PARTY_DELAY = 0.2
 function onFrame(event) {
     // people randomly moving about
     for (var i = 0; i < people.length; i++) {
