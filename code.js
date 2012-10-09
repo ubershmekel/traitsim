@@ -9,7 +9,7 @@ var BLUE = {
     };
 var BROWN = {
     name: 'brown',
-    color: '#930',
+    color: '#652f16',
     isDominant: true,
     toString: function() { return this.name }
     };
