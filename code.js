@@ -6,19 +6,20 @@ var BLUE = {
     color: '#29f',
     isDominant: false,
     toString: function() { return this.name }
-    };
+    }
 var BROWN = {
     name: 'brown',
     color: '#652f16',
     isDominant: true,
     toString: function() { return this.name }
-    };
+    }
 
-var GENE_HEIGHT = 10;
-var GENE_WIDTH = 20;
-var GENE_SPACING = 5;
-var MARGIN = view.size.width / 10;
-var initAmount = 100;
+var GENE_HEIGHT = 10
+var GENE_WIDTH = 20
+var GENE_SPACING = 5
+var MARGIN = view.size.width / 10
+var CHILD_SPACING = 20
+var initAmount = 100
 
 function shuffle(list) {
 //shuffles list in-place
@@ -237,7 +238,7 @@ function birthAndKill(person1, person2) {
     var pos = randomSpot()
     for(var j = 0; j < 2; j++) {
         var newGenes = [getRandom(person1.genes), getRandom(person2.genes)]
-        people.push(initPerson(newGenes, pos + [j * 10, 0]))
+        people.push(initPerson(newGenes, pos + [j * CHILD_SPACING, 0]))
     }
     
     person1.path.remove()

@@ -17,4 +17,4 @@ there are likely to be 25% people with blue eyes and 75% with brown eyes.
 
 Based on [Paper.js](http://paperjs.org)
 
-Live demo at http://yuvalg.com/traitsim/
+Live demo at http://toplessproductions.com/traitsim/
