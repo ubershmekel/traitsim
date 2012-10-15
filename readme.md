@@ -23,6 +23,8 @@ Calculations:
 
 ![graph for recessive vs dominant gene demographics](http://i.imgur.com/Z4LM4.png "This only refers to gene expression, not to be confused with chance of extinction.")
 
+
+
 TraitSim Explained
 ========================
 
@@ -41,6 +43,16 @@ there are likely to be 25% with blue eyes and 75% with brown eyes.
 
 Note that [eye color](http://en.wikipedia.org/wiki/Eye_color) isn't really determined by one or two
 genes.
+
+Statistics
+===============
+Expected extinction statistics for extinction:
+
+* average generations: 525
+* stddev: 372 
+* median: 410
+
+
 
 Animated and drawn with the [Paper.js](http://paperjs.org) framework.
 
