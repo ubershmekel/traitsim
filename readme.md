@@ -1,6 +1,30 @@
-There's a common misconception in the biology classroom that [recessive traits](http://en.wikipedia.org/wiki/Recessive) are
-likely to become rarer across generations. This simulation is a toy to help
-people explore and understand random trait and gene proliferation.
+﻿TraitSim
+============
+
+This simulation is a toy to help explore and understand random trait and gene proliferation.
+
+There are common misconceptions in the biology classroom about [recessive traits](http://en.wikipedia.org/wiki/Recessive).
+
+Myths:
+
+* Recessive traits are more likely to go extinct.
+* Dominant traits are more likely to grow in numbers with each generation.
+* It'd be surprising to find a recessive gene in a majority over a dominant gene (e.g. O blood type is recessive and the majority).
+
+Truths:
+
+* In completely random procreation, the recessive and dominant traits are equally likely to go extinct.
+* If both gene counts are even, dominant traits are likely to be expressed in 75% of the population.
+
+Calculations:
+* D - the percentage of the gene pool with the dominant trait. R the percentage of the recessive gene.
+* Dominant genes are likely to be expressed = D + D * R
+* Recessive genes are likely to be expressed = R²
+
+![graph for recessive vs dominant gene demographics](http://i.imgur.com/Z4LM4.png "This only refers to gene expression, not to be confused with chance of extinction.")
+
+TraitSim Explained
+========================
 
 People are illustrated as a pair of dots. One colored dot per gene. If the
 brown eyed gene is present it will appear in front of the blue eyed gene.
