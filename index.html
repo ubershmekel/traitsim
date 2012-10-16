@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Traitsim : Recessive and dominant gene profileration simulation" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Traitsim</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/ubershmekel/traitsim">View on GitHub</a>
+
+          <h1 id="project_title">Traitsim</h1>
+          <h2 id="project_tagline">Recessive and dominant gene profileration simulation</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/ubershmekel/traitsim/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/ubershmekel/traitsim/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1><a href="http://yuvalg.com/traitsim/">TraitSim</a></h1>
+
+<p>This simulation is a toy to help explore and understand random trait and gene proliferation.</p>
+
+<p>There are common misconceptions in the biology classroom about <a href="http://en.wikipedia.org/wiki/Recessive">recessive traits</a>.</p>
+
+<p>Myths:</p>
+
+<ul>
+<li>Recessive traits are more likely to go extinct.</li>
+<li>Dominant traits are more likely to grow in numbers with each generation.</li>
+<li>It'd be surprising to find a recessive gene in a majority over a dominant gene (e.g. <a href="http://en.wikipedia.org/wiki/ABO_blood_group_system">O blood type is recessive and the majority</a>).</li>
+</ul><p>Truths:</p>
+
+<ul>
+<li>In completely random procreation, neutral recessive and dominant traits are equally likely to go extinct.</li>
+<li>If both gene counts are even, dominant traits are likely to be expressed in 75% of the population.</li>
+</ul><h1>A neutral gene's chance of going extinct has nothing to do with its dominance</h1>
+
+<p><img src="http://i.imgur.com/jb4QN.png" alt="graph for chance to go extinct" title="Chance to go extinct, has nothing to do with dominance."></p>
+
+<h1>Dominance affects trait prevalence</h1>
+
+<p><img src="http://i.imgur.com/Z4LM4.png" alt="graph for recessive vs dominant gene demographics" title="This only refers to gene expression, not to be confused with chance of extinction."></p>
+
+<ul>
+<li>D - the percentage of the gene pool with the dominant trait.</li>
+<li>R - percentage of the recessive gene.</li>
+<li>Dominant genes are likely to be expressed = D + D * R</li>
+<li>Recessive genes are likely to be expressed = R²</li>
+</ul><h1>TraitSim Explained</h1>
+
+<p>People are illustrated as a pair of dots. One colored dot per gene. If the
+brown eyed gene is present it will appear in front of the blue eyed gene.</p>
+
+<p>Each "sex" generation causes the entire population to randomly pair up and
+make 2 children. The results are visible in the bar graphs at the bottom left.
+Note that when 2 parents mate, each gene from the parent is equally likely
+to be inherited.</p>
+
+<p>After leaving the "sex party" on for enough time, most likely one of the gene types
+will become extinct. The gene type with the lower current gene count is more likely to
+decrease further. During a tie with 50% blue vs 50% brown genes,
+there are likely to be 25% with blue eyes and 75% with brown eyes.</p>
+
+<p>Note that <a href="http://en.wikipedia.org/wiki/Eye_color">eye color</a> isn't really determined by one or two
+genes.</p>
+
+<h1>Statistics</h1>
+
+<p>Expected extinction statistics for extinction in TraitSim (100 people always have 2 kids with equal initial gene counts):</p>
+
+<ul>
+<li>average generations: 525</li>
+<li>stddev: 372 </li>
+<li>median: 410</li>
+</ul><p>Animated and drawn with the <a href="http://paperjs.org">Paper.js</a> framework.</p>
+
+<p><a href="http://yuvalg.com/traitsim/">Live demo</a></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Traitsim maintained by <a href="https://github.com/ubershmekel">ubershmekel</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-4533496-16");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
+  </body>
+</html>
