@@ -59,7 +59,7 @@ Expected extinction statistics for extinction in TraitSim (100 people always hav
 * stddev: 372 
 * median: 410
 
-
+Trivia: negative dominant traits are more likely to go extinct because they're always apparent. Negative recessive traits may go unnoticed and are harder to erase intentionally.
 
 Animated and drawn with the [Paper.js](http://paperjs.org) framework.
 
