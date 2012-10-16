@@ -1,4 +1,4 @@
-﻿TraitSim
+﻿[TraitSim][1]
 ============
 
 This simulation is a toy to help explore and understand random trait and gene proliferation.
@@ -9,27 +9,26 @@ Myths:
 
 * Recessive traits are more likely to go extinct.
 * Dominant traits are more likely to grow in numbers with each generation.
-* It'd be surprising to find a recessive gene in a majority over a dominant gene (e.g. O blood type is recessive and the majority).
+* It'd be surprising to find a recessive gene in a majority over a dominant gene (e.g. [O blood type is recessive and the majority](http://en.wikipedia.org/wiki/ABO_blood_group_system)).
 
 Truths:
 
-* In completely random procreation, the recessive and dominant traits are equally likely to go extinct.
+* In completely random procreation, neutral recessive and dominant traits are equally likely to go extinct.
 * If both gene counts are even, dominant traits are likely to be expressed in 75% of the population.
 
-Calculations:
-* D - the percentage of the gene pool with the dominant trait. R the percentage of the recessive gene.
-* Dominant genes are likely to be expressed = D + D * R
-* Recessive genes are likely to be expressed = R²
-
-
-A neutral gene's chance of going extinct has nothing to do with its dominance.
+A neutral gene's chance of going extinct has nothing to do with its dominance
 ==============
 
 ![graph for chance to go extinct](http://i.imgur.com/jb4QN.png "Chance to go extinct, has nothing to do with dominance.")
 
-Dominance has to do with trait prevalence.
+Dominance affects trait prevalence
 ==============
 ![graph for recessive vs dominant gene demographics](http://i.imgur.com/Z4LM4.png "This only refers to gene expression, not to be confused with chance of extinction.")
+
+* D - the percentage of the gene pool with the dominant trait.
+* R - percentage of the recessive gene.
+* Dominant genes are likely to be expressed = D + D * R
+* Recessive genes are likely to be expressed = R²
 
 
 
@@ -54,7 +53,7 @@ genes.
 
 Statistics
 ===============
-Expected extinction statistics for extinction:
+Expected extinction statistics for extinction in TraitSim (100 people always have 2 kids with equal initial gene counts):
 
 * average generations: 525
 * stddev: 372 
@@ -64,4 +63,6 @@ Expected extinction statistics for extinction:
 
 Animated and drawn with the [Paper.js](http://paperjs.org) framework.
 
-Live demo at http://yuvalg.com/traitsim/
+[Live demo][1]
+
+[1]: http://yuvalg.com/traitsim/
