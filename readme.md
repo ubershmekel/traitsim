@@ -21,6 +21,14 @@ Calculations:
 * Dominant genes are likely to be expressed = D + D * R
 * Recessive genes are likely to be expressed = R²
 
+
+A neutral gene's chance of going extinct has nothing to do with its dominance.
+==============
+
+![graph for chance to go extinct](http://i.imgur.com/jb4QN.png "Chance to go extinct, has nothing to do with dominance.")
+
+Dominance has to do with trait prevalence.
+==============
 ![graph for recessive vs dominant gene demographics](http://i.imgur.com/Z4LM4.png "This only refers to gene expression, not to be confused with chance of extinction.")
 
 

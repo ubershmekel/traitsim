@@ -48,10 +48,11 @@ def graph_pops():
     #pairs = sorted(results.items())
     ax = plt.subplot(111)
     #xs, ys = zip(*pairs)
-    ax.plot(xs, np.array(xs) * 1.0 / max(xs), label='expected', linewidth=3, c='#000000')
-    ax.plot(xs, ys, label='simulated', linewidth=3, c='#2299ff')
+    ax.plot(xs, np.array(xs) * 1.0 / max(xs), label='expected', linewidth=3, c='#777777', linestyle='dashed')
+    ax.plot(xs, ys, label='simulated', linewidth=1, c='#2299ff')
     plt.ylabel('probability of the other gene going extinct')
     plt.xlabel('Initial % of gene pool')
+    plt.legend(loc=2)
     plt.show()
 
 if __name__ == "__main__":
