@@ -1,9 +1,14 @@
+import ast
+from collections import Counter
+import pprint
 import time
 import random
 import math
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+from simulate import *
 
 def dark(r, d):
     """
@@ -15,7 +20,7 @@ def dark(r, d):
     return d * 1.0 / (r + d) + d * r * 1.0 / ((r + d) ** 2)
 
 
-def show_expression():
+def graph_expression():
     xs = range(0,101)
     ys = [100 * dark(100 - i, i) for i in xs]
     ax = plt.subplot(111)
@@ -31,60 +36,24 @@ def show_expression():
 
     plt.show()
 
-BROWN = 0
-BLUE = 1
 
-class Pop:
-    def __init__(self, pop_size=50):
-        # imagine that self.genes[:2] is a person
-        self.genes = [BROWN, BLUE] * pop_size
-        random.shuffle(self.genes)
-        self.generations = 0
-    
-    def generation(self):
-        new_genes = []
-        for i in xrange(len(self.genes) // 4):
-            mate1 = [self.genes.pop(), self.genes.pop()]
-            mate2_index = random.randint(0, (len(self.genes) - 2) / 2)
-            mate2 = self.genes.pop(mate2_index * 2), self.genes.pop(mate2_index * 2)
-            
-            new_genes.append(random.choice(mate1))
-            new_genes.append(random.choice(mate2))
-            
-            new_genes.append(random.choice(mate1))
-            new_genes.append(random.choice(mate2))
-            
-        self.genes = new_genes
-        self.generations += 1
-    
-    def until_extinct(self):
-        while (BLUE in self.genes) and (BROWN in self.genes):
-            self.generation()
-        
-
-TESTS = 1000
-
-def main():
-    global death_gens
-    death_gens = []
-    
-    start = time.time()
-    for i in xrange(TESTS):
-        print i,
-        p = Pop()
-        p.until_extinct()
-        death_gens.append(p.generations)
-    
-    print 'after %g minutes' % ( (time.time() - start) / 60.0)
-    print 'ran %d tests' % TESTS
-    print 'min', min(death_gens)
-    print 'max', max(death_gens)
-    print 'avg', np.mean(death_gens)
-    print 'stddev', np.std(death_gens)
-    print 'median', np.median(death_gens)
-    plt.hist(death_gens, bins=TESTS / 10)
+def graph_pops():
+    text = open(OUTPUT_FNAME).read()
+    results = ast.literal_eval(text)
+    xs = []
+    ys = []
+    for key, gene_pool in results.items():
+        xs.append(key)
+        ys.append(gene_pool.count(BROWN) * 1.0 / len(gene_pool))
+    #pairs = sorted(results.items())
+    ax = plt.subplot(111)
+    #xs, ys = zip(*pairs)
+    ax.plot(xs, np.array(xs) * 1.0 / max(xs), label='expected', linewidth=3, c='#000000')
+    ax.plot(xs, ys, label='simulated', linewidth=3, c='#2299ff')
+    plt.ylabel('probability of the other gene going extinct')
+    plt.xlabel('Initial % of gene pool')
     plt.show()
 
-
 if __name__ == "__main__":
-    main()
+    #graph_expression()
+    graph_pops()
