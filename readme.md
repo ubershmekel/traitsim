@@ -65,4 +65,4 @@ Animated and drawn with the [Paper.js](http://paperjs.org) framework.
 
 [Live demo][1]
 
-[1]: https://yuvalg.com/traitsim/
+[1]: http://ubershmekel.github.io/traitsim/
